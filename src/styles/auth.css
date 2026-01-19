@@ -1,0 +1,105 @@
+/* Auth Layout */
+.auth-container {
+    display: flex;
+    min-height: 100vh;
+    background-color: var(--color-bg-light);
+}
+
+.auth-left {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacing-xl);
+}
+
+.auth-right {
+    flex: 1;
+    background-color: var(--color-bg-peach);
+    /* Fallback */
+    display: none;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding: var(--spacing-xl);
+    text-align: center;
+}
+
+@media (min-width: 768px) {
+    .auth-right {
+        display: flex;
+    }
+}
+
+.auth-illustration-container {
+    max-width: 600px;
+    width: 100%;
+}
+
+.auth-illustration {
+    width: 100%;
+    height: auto;
+    display: block;
+    /* multiply blend mode can help integrate white bg images if needed, 
+     but our generated image has peach bg potentially. 
+     If transparent, normal is fine. */
+}
+
+.auth-quote {
+    margin-top: var(--spacing-lg);
+    font-size: 1.5rem;
+    color: var(--color-text-main);
+    max-width: 80%;
+    font-weight: 600;
+}
+
+/* Auth Card */
+.auth-card {
+    background: var(--color-bg-card);
+    /* OR var(--color-bg-peach) based on ref */
+    /* Reference shows a darker peach/pink card on a lighter background for Login form? 
+     Let's look at reference image description:
+     "Rounded login card... with same background pattern and color treatment"
+     Actually image shows a peach card on a peach/white background.
+     Let's stick to a soft card style. */
+    background: white;
+    /* Actually reference image 2 (MacBook Air - 1) shows a peach card on a lighter background. 
+     Let's use a soft peach card. */
+    background: rgba(255, 230, 215, 0.6);
+    /* Semi-transparent peach */
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+
+    padding: var(--spacing-xl);
+    border-radius: var(--radius-xl);
+    width: 100%;
+    max-width: 600px;
+    box-shadow: var(--color-bg-light);
+}
+
+.auth-title {
+    text-align: center;
+    font-size: 2rem;
+    margin-bottom: var(--spacing-xl);
+    font-weight: 600;
+    color: var(--color-text-main);
+}
+
+.auth-form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+}
+
+.auth-link-text {
+    margin-top: var(--spacing-md);
+    text-align: center;
+    font-size: 1.1rem;
+    color: var(--color-text-muted);
+}
+
+.auth-link {
+    color: var(--color-primary);
+    font-weight: 600;
+    margin-left: var(--spacing-xs);
+}

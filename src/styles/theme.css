@@ -1,0 +1,57 @@
+:root {
+  /* Pastel Palette from References */
+  --color-bg-light: #FDFDF6; /* Very soft warm white */
+  --color-bg-peach: #FFDAB9; /* Main Peach */
+  --color-bg-card: #F9EFE6; /* Card background, slightly darker than main bg */
+  
+  --color-accent-peach: #FFCBA4;
+  --color-accent-pink: #FFB7B2;
+  --color-primary: #E29578; /* Darker peach for buttons/active states */
+  
+  --color-text-main: #4A403A; /* Soft dark brown, not black */
+  --color-text-muted: #8D8178;
+  
+  --color-success: #A3C9A8; /* Soft green */
+  --color-warning: #FFDAC1; /* Soft orange */
+  --color-danger: #E29578; /* Soft red/peach */
+
+  /* Typography */
+  --font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  
+  /* Spacing */
+  --spacing-xs: 0.25rem;
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+  --spacing-xl: 2rem;
+  
+  /* Borders & Shadows */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 20px;
+  --radius-xl: 32px;
+  
+  --shadow-soft: 0 8px 30px rgba(226, 149, 120, 0.15);
+  --shadow-card: 0 4px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px -1px rgba(0, 0, 0, 0.02);
+}
+
+body {
+  background-color: var(--color-bg-light);
+  color: var(--color-text-main);
+  font-family: var(--font-family);
+  margin: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  font-family: inherit;
+}
+
+input, textarea {
+  font-family: inherit;
+  border: none;
+  outline: none;
+}
