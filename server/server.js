@@ -20,7 +20,7 @@ app.use('/api/tasks', require('./routes/tasks'));
 
 
 const PORT = process.env.PORT || 5000;
-if (process.env.NODE_ENV !== 'test') { // Prevent listening during tests or serverless import if needed
+if (require.main === module) {
     app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
 }
 
