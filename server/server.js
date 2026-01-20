@@ -18,5 +18,10 @@ mongoose.connect(MONGO_URI)
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/tasks', require('./routes/tasks'));
 
+
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
+if (process.env.NODE_ENV !== 'test') { // Prevent listening during tests or serverless import if needed
+    app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
+}
+
+module.exports = app;
