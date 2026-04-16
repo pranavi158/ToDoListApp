@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Crown } from 'lucide-react';
 import DashboardLayout from '../layouts/DashboardLayout';
 import TaskInput from '../components/TaskInput';
 import TaskList from '../components/TaskList';
@@ -67,6 +68,51 @@ const Dashboard = () => {
         }
     };
 
+    const handleGoPremium = async () => {
+        const loadRazorpayScript = () => {
+            return new Promise((resolve) => {
+                const script = document.createElement('script');
+                script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+                script.onload = () => resolve(true);
+                script.onerror = () => resolve(false);
+                document.body.appendChild(script);
+            });
+        };
+
+        const res = await loadRazorpayScript();
+        if (!res) {
+            alert('Razorpay SDK failed to load. Are you online?');
+            return;
+        }
+
+        try {
+            const keyRes = await api.get('/auth/razorpay-key');
+            
+            const options = {
+                key: keyRes.data.key,
+                amount: "50000",
+                currency: "INR",
+                name: "Todo App Premium",
+                description: "Upgrade to Premium subscription",
+                handler: function (response) {
+                    alert(`Payment successful! Welcome to Premium.\nPayment ID: ${response.razorpay_payment_id}`);
+                },
+                prefill: {
+                    name: user?.username || '',
+                    email: user?.email || '',
+                },
+                theme: {
+                    color: "#4B44BD"
+                }
+            };
+            const paymentObject = new window.Razorpay(options);
+            paymentObject.open();
+        } catch (error) {
+            console.error("Payment error:", error);
+            alert("Could not initiate payment. Please try later.");
+        }
+    };
+
     // Note: We need a soft delete function in TaskList card, currently TaskList just has toggle.
     // We'll update TaskList to support delete action.
 
@@ -92,13 +138,21 @@ const Dashboard = () => {
 
     return (
         <DashboardLayout user={user}>
-            <header className="dashboard-header">
+            <header className="dashboard-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>
                 <div className="header-content">
                     <h1>My Tasks</h1>
                     <p>Stay organized and calm.</p>
                 </div>
-                <div className="header-image">
-                    <img src="https://media.tenor.com/sqxKQ3lUS_wAAAAM/spongebob-spongebob-squarepants.gif" alt="Relaxing lo-fi vibes" />
+                <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+                    <button 
+                        onClick={handleGoPremium}
+                        style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', background: 'linear-gradient(45deg, #FFD700, #FFA500)', color: '#000', border: 'none', padding: '0.6rem 1rem', borderRadius: '8px', cursor: 'pointer', fontWeight: 'bold', fontSize: '0.95rem' }}>
+                        <Crown size={18} />
+                        Go Premium
+                    </button>
+                    <div className="header-image" style={{ margin: 0 }}>
+                        <img src="https://media.tenor.com/sqxKQ3lUS_wAAAAM/spongebob-spongebob-squarepants.gif" alt="Relaxing lo-fi vibes" style={{ height: '60px', width: 'auto', borderRadius: '8px' }} />
+                    </div>
                 </div>
             </header>
 
