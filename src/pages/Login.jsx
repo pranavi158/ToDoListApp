@@ -4,6 +4,7 @@ import AuthLayout from '../layouts/AuthLayout';
 import Input from '../components/Input';
 import Button from '../components/Button';
 import { User, Lock, ArrowRight } from 'lucide-react';
+import { GoogleLogin } from '@react-oauth/google';
 import api from '../services/api';
 
 const Login = () => {
@@ -23,6 +24,17 @@ const Login = () => {
             navigate('/dashboard');
         } catch (err) {
             setError(err.response?.data?.msg || 'Login failed');
+        }
+    };
+
+    const handleGoogleSuccess = async (credentialResponse) => {
+        try {
+            const res = await api.post('/auth/google', { token: credentialResponse.credential });
+            localStorage.setItem('token', res.data.token);
+            localStorage.setItem('user', JSON.stringify(res.data.user));
+            navigate('/dashboard');
+        } catch (err) {
+            setError('Google Login failed');
         }
     };
 
@@ -56,6 +68,14 @@ const Login = () => {
                     <Button type="submit" variant="primary" style={{ marginTop: '0.5rem' }}>
                         ENTER
                     </Button>
+
+                    <div style={{ marginTop: '1rem', display: 'flex', justifyContent: 'center' }}>
+                        <GoogleLogin
+                            onSuccess={handleGoogleSuccess}
+                            onError={() => setError('Google Login Failed')}
+                        />
+                    </div>
+
 
                     <div className="auth-link-text">
                         <span>New here?</span>
