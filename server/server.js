@@ -17,6 +17,10 @@ mongoose.connect(MONGO_URI)
 // Routes
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/tasks', require('./routes/tasks'));
+app.use('/api/payment', require('./routes/payment'));
+
+// Health Check for ALB
+app.get('/health', (req, res) => res.status(200).send('OK'));
 
 const PORT = process.env.PORT || 5000;
 if (require.main === module) {

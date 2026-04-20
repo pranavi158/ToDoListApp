@@ -18,7 +18,6 @@ const transporter = nodemailer.createTransport({
     }
 });
 
-// Send OTP
 router.post('/send-otp', async (req, res) => {
     const { email } = req.body;
     try {
@@ -55,7 +54,6 @@ router.post('/send-otp', async (req, res) => {
     }
 });
 
-// Register
 router.post('/register', async (req, res) => {
     const { username, email, password, otp } = req.body;
     try {
@@ -74,12 +72,11 @@ router.post('/register', async (req, res) => {
 
         user = new User({ username, email, password });
 
-        // Hash password
         const salt = await bcrypt.genSalt(10);
         user.password = await bcrypt.hash(password, salt);
 
         await user.save();
-        await Otp.deleteOne({ email }); // Clear OTP once used
+        await Otp.deleteOne({ email }); 
 
         const payload = { user: { id: user.id } };
         jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '5d' }, (err, token) => {
@@ -92,13 +89,17 @@ router.post('/register', async (req, res) => {
     }
 });
 
-// Login
 router.post('/login', async (req, res) => {
     const { email, password } = req.body;
     try {
         let user = await User.findOne({ email });
         if (!user) {
             return res.status(400).json({ msg: 'Invalid Credentials' });
+        }
+
+        // Google-only users have no password set
+        if (!user.password) {
+            return res.status(400).json({ msg: 'This account uses Google Sign-In. Please use the Google button to login.' });
         }
 
         const isMatch = await bcrypt.compare(password, user.password);
@@ -117,7 +118,6 @@ router.post('/login', async (req, res) => {
     }
 });
 
-// Google OAuth Login
 router.post('/google', async (req, res) => {
     const { token } = req.body;
     try {
@@ -155,8 +155,6 @@ router.post('/google', async (req, res) => {
     }
 });
 
-
-// Reset Password
 router.post('/reset-password', async (req, res) => {
     const { email, newPassword } = req.body;
     try {
@@ -165,7 +163,6 @@ router.post('/reset-password', async (req, res) => {
             return res.status(400).json({ msg: 'User not found' });
         }
 
-        // Hash new password
         const salt = await bcrypt.genSalt(10);
         user.password = await bcrypt.hash(newPassword, salt);
 
@@ -177,7 +174,6 @@ router.post('/reset-password', async (req, res) => {
     }
 });
 
-// Get User
 router.get('/', auth, async (req, res) => {
     try {
         const user = await User.findById(req.user.id).select('-password');
@@ -188,7 +184,6 @@ router.get('/', auth, async (req, res) => {
     }
 });
 
-// Get Razorpay Key
 router.get('/razorpay-key', auth, (req, res) => {
     res.json({ key: process.env.RAZORPAY_KEY_ID });
 });
